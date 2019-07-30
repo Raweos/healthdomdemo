@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 class EmployeeConfig {
     @Bean
-    EmployeeCreationService employeeCreationService(EmployeeRepository employeeRepository){
-        return new EmployeeCreationService(employeeRepository);
+    EmployeeService employeeCreationService(EmployeeRepository employeeRepository){
+        return new EmployeeService(employeeRepository);
     }
 }

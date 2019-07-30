@@ -5,7 +5,7 @@ public class PhoneNumber {
     private final PhoneNumberType phoneNumberType;
     private final String phoneNumber;
 
-    public PhoneNumber(PhoneNumberType phoneNumberType, String phoneNumber) {
+    private PhoneNumber(PhoneNumberType phoneNumberType, String phoneNumber) {
         this.phoneNumberType = phoneNumberType;
         this.phoneNumber = phoneNumber;
     }
@@ -14,6 +14,9 @@ public class PhoneNumber {
         return phoneNumber;
     }
 
+    public static PhoneNumber createUSNumber(String phoneNumber){
+        return new PhoneNumber(PhoneNumberType.US, phoneNumber);
+    }
 
 
 }
