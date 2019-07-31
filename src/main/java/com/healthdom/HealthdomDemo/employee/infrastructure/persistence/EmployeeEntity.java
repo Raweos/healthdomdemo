@@ -1,4 +1,4 @@
-package com.healthdom.HealthdomDemo.employee.infrastructure;
+package com.healthdom.HealthdomDemo.employee.infrastructure.persistence;
 
 import java.util.UUID;
 

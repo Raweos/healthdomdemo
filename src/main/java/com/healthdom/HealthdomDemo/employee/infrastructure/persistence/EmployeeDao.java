@@ -1,4 +1,4 @@
-package com.healthdom.HealthdomDemo.employee.infrastructure;
+package com.healthdom.HealthdomDemo.employee.infrastructure.persistence;
 
 import java.util.List;
 import java.util.Objects;
@@ -10,7 +10,6 @@ import com.healthdom.HealthdomDemo.employee.domain.Employee;
 import com.healthdom.HealthdomDemo.employee.domain.EmployeeNotFoundException;
 import com.healthdom.HealthdomDemo.employee.domain.EmployeeRepository;
 import com.healthdom.HealthdomDemo.employee.domain.PhoneNumber;
-import com.healthdom.HealthdomDemo.employee.domain.PhoneNumberType;
 
 import static java.util.stream.Collectors.toList;
 

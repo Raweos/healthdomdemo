@@ -1,7 +1,5 @@
-package com.healthdom.HealthdomDemo.employee.infrastructure;
+package com.healthdom.HealthdomDemo.employee.infrastructure.persistence;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 import lombok.Value;
 
 @Value

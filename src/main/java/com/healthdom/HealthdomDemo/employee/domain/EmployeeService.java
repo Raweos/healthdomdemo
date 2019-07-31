@@ -3,9 +3,7 @@ package com.healthdom.HealthdomDemo.employee.domain;
 import java.util.List;
 import java.util.Objects;
 
-import org.springframework.http.HttpStatus;
-
-import com.healthdom.HealthdomDemo.employee.infrastructure.EmployeeDto;
+import com.healthdom.HealthdomDemo.employee.infrastructure.persistence.EmployeeDto;
 
 import lombok.extern.slf4j.Slf4j;
 
