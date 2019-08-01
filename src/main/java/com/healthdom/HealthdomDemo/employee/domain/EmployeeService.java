@@ -1,14 +1,19 @@
 package com.healthdom.HealthdomDemo.employee.domain;
 
+import com.healthdom.HealthdomDemo.employee.infrastructure.rest.EmployeeDetailsDto;
+import com.healthdom.HealthdomDemo.employee.infrastructure.rest.EmployeeDto;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
-import com.healthdom.HealthdomDemo.employee.infrastructure.persistence.EmployeeDto;
-
-import lombok.extern.slf4j.Slf4j;
+import static java.lang.String.format;
 
 @Slf4j
-class EmployeeService {
+public class EmployeeService {
 
     private final EmployeeRepository employeeRepository;
 
@@ -16,28 +21,45 @@ class EmployeeService {
         this.employeeRepository = employeeRepository;
     }
 
-    void createEmployee(EmployeeDto employeeDto) {
-        PhoneNumber phoneNumber = PhoneNumber.createUSNumber(employeeDto.getPhoneNumber());
-        Employee employee = employeeRepository.findByPhoneNumber(phoneNumber);
-        if(!Objects.isNull(employee)) {
-            throw new EmployeeAlreadyExistsException("Cannot save employee, already exists");
-        }
-        Employee employeeToSave = new Employee(employeeDto.getFirstName(), employeeDto.getLastName(), phoneNumber);
+    public EmployeeDto createEmployee(EmployeeDetailsDto employeeDetailsDto) {
+        PhoneNumber phoneNumber = PhoneNumber.createUSNumber(employeeDetailsDto.getPhoneNumber());
+        Employee employeeToSave = new Employee(employeeDetailsDto.getFirstName(), employeeDetailsDto.getLastName(), phoneNumber);
         employeeRepository.save(employeeToSave);
+        log.info(format("Created employee with id %s", employeeToSave.getId()));
+        return mapEmployeeToDto(employeeToSave);
     }
 
-    List<Employee> getAll() {
-        return employeeRepository.findAll();
+    public List<EmployeeDto> getAll() {
+        return employeeRepository.findAll().stream().map(this::mapEmployeeToDto).collect(Collectors.toList());
     }
 
-    Employee findByPhoneNumber(String phoneNumber) {
-        return employeeRepository.findByPhoneNumber(PhoneNumber.createUSNumber(phoneNumber));
+    public EmployeeDto findById(String id) {
+        Employee employee = Optional.ofNullable(employeeRepository.findById(id))
+                .orElseThrow(() -> new EmployeeNotFoundException("No such employee", HttpStatus.NOT_FOUND.value()));
+        return mapEmployeeToDto(employee);
     }
 
-    void updateEmployee(EmployeeDto employeeToUpdateDto) {
-        PhoneNumber phoneNumber = PhoneNumber.createUSNumber(employeeToUpdateDto.getPhoneNumber());
-        employeeRepository.update(new Employee(employeeToUpdateDto.getFirstName(),
-                employeeToUpdateDto.getLastName(), phoneNumber));
+    public void deleteEmployee(String id) {
+        employeeRepository.deleteEmployee(id);
+        log.info(format("Deleted employee with id %s", id));
     }
+
+    public EmployeeDto updateEmployee(EmployeeDto employeeToUpdateDto) {
+        PhoneNumber phoneNumber = PhoneNumber.createUSNumber(employeeToUpdateDto.getEmployeeDetailsDto().getPhoneNumber());
+        Employee employee = Optional.ofNullable(employeeRepository.findById(employeeToUpdateDto.getId()))
+                .orElseThrow(() -> new EmployeeNotFoundException("Cannot update employee, it does not exist",
+                        HttpStatus.NOT_FOUND.value()));
+        Employee employeeToUpdate = new Employee(employee.getId(), employeeToUpdateDto.getEmployeeDetailsDto().getFirstName(),
+                employeeToUpdateDto.getEmployeeDetailsDto().getLastName(), phoneNumber);
+        employeeRepository.save(employeeToUpdate);
+        log.info(format("Updated employee with id %s", employeeToUpdate.getId()));
+        return mapEmployeeToDto(employeeToUpdate);
+    }
+
+    private EmployeeDto mapEmployeeToDto(Employee employee) {
+        return new EmployeeDto(employee.getId().toString(), employee.getFirstName(),
+                employee.getLastName(), employee.getPhoneNumber().stringValue());
+    }
+
 
 }

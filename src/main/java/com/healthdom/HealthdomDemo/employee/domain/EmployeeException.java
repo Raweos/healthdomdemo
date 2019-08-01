@@ -1,11 +1,15 @@
 package com.healthdom.HealthdomDemo.employee.domain;
 
-class EmployeeException extends RuntimeException {
+public class EmployeeException extends RuntimeException {
 
-    protected final int errorCode;
+    private final int errorCode;
 
-    public EmployeeException(String message, int errorCode) {
+    EmployeeException(String message, int errorCode) {
         super(message);
         this.errorCode = errorCode;
+    }
+
+    public int getErrorCode() {
+        return errorCode;
     }
 }

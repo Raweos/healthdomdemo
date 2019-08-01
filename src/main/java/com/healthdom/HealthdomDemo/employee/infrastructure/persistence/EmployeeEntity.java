@@ -1,17 +1,16 @@
 package com.healthdom.HealthdomDemo.employee.infrastructure.persistence;
 
-import java.util.UUID;
-
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import lombok.Getter;
-import lombok.Setter;
-
 @Getter
 @Document(collection = "employees")
 @Setter
+@AllArgsConstructor
 class EmployeeEntity {
 
     @Id
@@ -21,10 +20,4 @@ class EmployeeEntity {
     @Indexed(unique = true)
     private String phoneNumber;
 
-    EmployeeEntity(String firstName, String lastName, String phoneNumber) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.phoneNumber = phoneNumber;
-        id = UUID.randomUUID().toString();
-    }
 }

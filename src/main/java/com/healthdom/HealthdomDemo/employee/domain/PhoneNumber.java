@@ -10,7 +10,6 @@ public class PhoneNumber {
     private final PhoneNumberType phoneNumberType;
     private final String phoneNumber;
 
-
     private PhoneNumber(PhoneNumberType phoneNumberType, String phoneNumber) {
         this.phoneNumberType = phoneNumberType;
         this.phoneNumber = phoneNumber;
@@ -21,16 +20,14 @@ public class PhoneNumber {
         return phoneNumber;
     }
 
-    void validate(){
-        Pattern pattern = Pattern.compile("[0-9]{3}[0-9]{3}[0-9]{4}$");
-        Matcher matcher = pattern.matcher(phoneNumber);
-
+    private void validate() {
+        Matcher matcher = phoneNumberType.getNumberPattern().matcher(phoneNumber);
         if (!matcher.matches()) {
             throw new InvalidPhoneNumberException("Wrong format of phone number", HttpStatus.NOT_ACCEPTABLE.value());
         }
     }
 
-    public static PhoneNumber createUSNumber(String phoneNumber){
+    public static PhoneNumber createUSNumber(String phoneNumber) {
         return new PhoneNumber(PhoneNumberType.US, phoneNumber);
     }
 

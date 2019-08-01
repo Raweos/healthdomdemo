@@ -1,15 +1,13 @@
 package com.healthdom.HealthdomDemo.employee.infrastructure.persistence;
 
-import java.util.List;
-import java.util.Objects;
-
-import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Component;
-
 import com.healthdom.HealthdomDemo.employee.domain.Employee;
-import com.healthdom.HealthdomDemo.employee.domain.EmployeeNotFoundException;
 import com.healthdom.HealthdomDemo.employee.domain.EmployeeRepository;
 import com.healthdom.HealthdomDemo.employee.domain.PhoneNumber;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
 
 import static java.util.stream.Collectors.toList;
 
@@ -23,8 +21,8 @@ class EmployeeDao implements EmployeeRepository {
     }
 
     @Override
-    public Employee findByPhoneNumber(PhoneNumber phoneNumber) {
-        return mapToEmployee(employeeMongoDao.findByPhoneNumber(phoneNumber.stringValue()));
+    public Employee findById(String id) {
+        return mapToEmployee(employeeMongoDao.findById(id).orElse(null));
     }
 
     @Override
@@ -38,32 +36,24 @@ class EmployeeDao implements EmployeeRepository {
     }
 
     @Override
-    public void update(Employee employeeToUpdate) {
-        EmployeeEntity oldEmployee = employeeMongoDao.findByPhoneNumber(employeeToUpdate.getPhoneNumber()
-                                                                                        .stringValue());
-        EmployeeEntity employeeEntity = mapToEntity(employeeToUpdate);
-        if(Objects.isNull(oldEmployee)) {
-            throw new EmployeeNotFoundException("Cannot update employee, it does not exist",
-                    HttpStatus.NOT_FOUND.value());
-        }
-        Objects.requireNonNull(employeeEntity).setId(oldEmployee.getId());
-        employeeMongoDao.save(employeeEntity);
+    public void deleteEmployee(String id) {
+        employeeMongoDao.deleteById(id);
     }
 
     private EmployeeEntity mapToEntity(Employee employee) {
-        if(Objects.isNull(employee)) {
+        if (Objects.isNull(employee)) {
             return null;
         }
-        return new EmployeeEntity(employee.getFirstName(), employee.getLastName(),
+        return new EmployeeEntity(employee.getId().toString(), employee.getFirstName(), employee.getLastName(),
                 employee.getPhoneNumber().stringValue());
     }
 
     private Employee mapToEmployee(EmployeeEntity employeeEntity) {
-        if(Objects.isNull(employeeEntity)) {
+        if (Objects.isNull(employeeEntity)) {
             return null;
         }
-        return new Employee(employeeEntity.getFirstName(), employeeEntity.getLastName(),
-                PhoneNumber.createUSNumber(employeeEntity.getPhoneNumber()));
+        return new Employee(UUID.fromString(employeeEntity.getId()), employeeEntity.getFirstName(),
+                employeeEntity.getLastName(), PhoneNumber.createUSNumber(employeeEntity.getPhoneNumber()));
     }
 
 
