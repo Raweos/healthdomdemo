@@ -1,12 +1,11 @@
 package com.healthdom.HealthdomDemo.employee.domain;
 
-import com.healthdom.HealthdomDemo.employee.infrastructure.rest.EmployeeDetailsDto;
-import com.healthdom.HealthdomDemo.employee.infrastructure.rest.EmployeeDto;
+import com.healthdom.HealthdomDemo.employee.domain.dto.EmployeeDetailsDto;
+import com.healthdom.HealthdomDemo.employee.domain.dto.EmployeeDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 

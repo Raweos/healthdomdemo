@@ -1,9 +1,9 @@
 package com.healthdom.HealthdomDemo.employee.domain
 
 import com.healthdom.HealthdomDemo.BaseIntegrationSpec
+import com.healthdom.HealthdomDemo.employee.domain.dto.EmployeeDetailsDto
+import com.healthdom.HealthdomDemo.employee.domain.dto.EmployeeDto
 import com.healthdom.HealthdomDemo.employee.infrastructure.persistence.EmployeeFixture
-import com.healthdom.HealthdomDemo.employee.infrastructure.rest.EmployeeDetailsDto
-import com.healthdom.HealthdomDemo.employee.infrastructure.rest.EmployeeDto
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 
