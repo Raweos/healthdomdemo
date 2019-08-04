@@ -1,9 +1,9 @@
 package com.healthdom.HealthdomDemo.employee.infrastructure.rest;
 
-import com.healthdom.HealthdomDemo.employee.domain.dto.EmployeeDetailsDto;
-import com.healthdom.HealthdomDemo.employee.domain.dto.EmployeeDto;
 import com.healthdom.HealthdomDemo.employee.domain.EmployeeException;
 import com.healthdom.HealthdomDemo.employee.domain.EmployeeService;
+import com.healthdom.HealthdomDemo.employee.domain.dto.EmployeeDetailsDto;
+import com.healthdom.HealthdomDemo.employee.domain.dto.EmployeeDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -57,5 +57,13 @@ class EmployeeController {
         log.error("Error occurred: " + exception.getMessage());
         return ResponseEntity.status(exception.getErrorCode()).body(new ExceptionDto(exception.getMessage(),
                 exception.getErrorCode()));
+    }
+
+    @ExceptionHandler(value = RuntimeException.class)
+    public ResponseEntity<ExceptionDto> handleError(RuntimeException exception) {
+        exception.printStackTrace();
+        log.error("Error occurred: " + exception.getMessage());
+        return ResponseEntity.status(500).body(new ExceptionDto("Error occurred",
+                HttpStatus.INTERNAL_SERVER_ERROR.value()));
     }
 }
